@@ -1,13 +1,53 @@
-[gd_scene load_steps=7 format=4 uid="uid://daq1tdvtllcjb"]
+[gd_scene load_steps=12 format=4 uid="uid://daq1tdvtllcjb"]
 
 [ext_resource type="Texture2D" uid="uid://c0ulwig8ut8ic" path="res://Sprites/Backgrounds/backgroundForest.png" id="1_5f7sk"]
 [ext_resource type="TileSet" uid="uid://ctf81b2563i20" path="res://Sprites/Tiles/new_tile_set.tres" id="1_qux8b"]
 [ext_resource type="PackedScene" uid="uid://c2jtipx6xqq4d" path="res://scenes/player.tscn" id="3_1tdkx"]
 [ext_resource type="Script" uid="uid://d3s5xq7f26qoa" path="res://scripts/enemy.gd" id="4_fxqaj"]
 [ext_resource type="Texture2D" uid="uid://cymud8icy0fpo" path="res://Sprites/Characters/character_0024.png" id="5_d6w1m"]
+[ext_resource type="Texture2D" uid="uid://w0o6vi1wxd6u" path="res://Sprites/Characters/character_0025.png" id="6_kjrqm"]
+[ext_resource type="Texture2D" uid="uid://dfjmlxqdkn1bb" path="res://Sprites/Characters/character_0026.png" id="7_bmqp6"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kjrqm"]
 radius = 7.0
+
+[sub_resource type="Animation" id="Animation_f63rn"]
+resource_name = "fly"
+length = 0.3
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.13333334, 0.23333333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("5_d6w1m"), ExtResource("6_kjrqm"), ExtResource("7_bmqp6")]
+}
+
+[sub_resource type="Animation" id="Animation_rp28y"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("5_d6w1m")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_crfhr"]
+_data = {
+&"RESET": SubResource("Animation_rp28y"),
+&"fly": SubResource("Animation_f63rn")
+}
 
 [node name="Main" type="Node2D"]
 position = Vector2(441, 4)
@@ -24,7 +64,7 @@ tile_set = ExtResource("1_qux8b")
 position = Vector2(-441, 0)
 
 [node name="Enemy" type="Area2D" parent="."]
-position = Vector2(-2, 1)
+position = Vector2(-1, -19)
 script = ExtResource("4_fxqaj")
 Move_direction = Vector2(0, -50)
 
@@ -35,3 +75,10 @@ texture = ExtResource("5_d6w1m")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy"]
 position = Vector2(-387, 35)
 shape = SubResource("CircleShape2D_kjrqm")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Enemy"]
+libraries = {
+&"": SubResource("AnimationLibrary_crfhr")
+}
+
+[connection signal="body_entered" from="Enemy" to="Enemy" method="_on_body_entered"]

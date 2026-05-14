@@ -6,6 +6,9 @@ extends Area2D
 @onready var start_pos : Vector2 = global_position
 @onready var target_pos : Vector2 = global_position + Move_direction
 
+func _ready ():
+	$AnimationPlayer.play("fly")
+
 func _physics_process(delta):
 	global_position = global_position.move_toward(target_pos, move_speed * delta)
 	
@@ -14,3 +17,10 @@ func _physics_process(delta):
 			target_pos = start_pos + Move_direction
 		else:
 			target_pos = start_pos
+
+func _on_body_entered(body: Node2D) -> void:
+	if not body.is_in_group("player"):
+		return
+	
+	body.take_damage(1)
+	
