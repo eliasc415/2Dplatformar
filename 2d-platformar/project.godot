@@ -15,6 +15,10 @@ run/main_scene="uid://daq1tdvtllcjb"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+playerstats="*res://scripts/playerstats.gd"
+
 [input]
 
 move_left={
